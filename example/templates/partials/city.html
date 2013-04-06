@@ -1,0 +1,28 @@
+<h1>{* city *}</h1>
+
+<div>
+  Add new activity: 
+  <input ng-model="newActivity">
+  <button ng-click="addActivity()">add</button>
+</div>
+
+<div>
+<h2>Activities</h2>
+<ul>
+  <li ng-hide="activities.length">No activities proposed for this city yet.</li>
+  <li ng-repeat="activity in activities">
+  	{*activity.name*} 
+  	
+  	<em>by {*activity.creator.name*}
+  	 +{* activity.upvotes*} / -{* activity.downvotes*} / 
+  	 total {* activity.upvotes - activity.downvotes*}</em>
+  	<a ng-click="vote(activity.id, true)" href="">yay:)</a> /
+  	<a ng-click="vote(activity.id, false)" href="">nay:(</a>
+  </li>
+
+</ul>
+</div>
+
+
+
+

@@ -1,0 +1,29 @@
+
+
+<div>
+Choose your city:
+<select ng-model="city" ng-change="selectCity(city)">
+  <option ng-repeat="city in cities" value="{*city.name*}">{*city.name*}</option>
+</select>
+
+You selected {* city *}
+</div>
+
+<div>
+  <ul class="cities">
+    <li ng-repeat="city in cities | filter:query | orderBy:orderProp">
+      <a href="#/cities/{*city.name*}">{*city.name*}</a>
+    </li>
+  </ul>
+</div>
+
+<div>
+<p>Your city is not listed? Be the first to contribute.</p>
+<form><input ng-model="newCity"></form>
+<button ng-click="addCity(newCity)">add</button>
+{* newCity *}
+</div>
+
+
+
+

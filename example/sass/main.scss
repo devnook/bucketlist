@@ -1,0 +1,32 @@
+@import "compass_twitter_bootstrap";
+
+$blue: #3bbfce;
+$margin: 16px;
+
+
+.navbar-wrapper {
+	margin-top: 20px;
+}
+
+
+div.hero-unit {
+
+	background-color: #fff;
+}
+
+div.banner {
+	backgound-color: #ccc;
+
+
+}
+
+.hidden {
+  display: none;
+}
+
+#twitter-sign-in {
+	background-image: url('/images/sign-in-with-twitter-gray.png');
+	width: 158px;
+	height: 28px;
+	display: inline-block;
+}

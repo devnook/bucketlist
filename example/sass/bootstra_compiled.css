@@ -1,0 +1,58 @@
+/*
+Syntax error: File to import not found or unreadable: compass.
+              Load path: /home/ewag/projects/taboo/styles
+        on line 11 of _compass_twitter_bootstrap.scss
+
+6:  * http://www.apache.org/licenses/LICENSE-2.0
+7:  *
+8:  * Designed and built with all the love in the world @twitter by @mdo and @fat.
+9:  */
+10: 
+11: @import "compass";
+12: 
+13: @import "compass_twitter_bootstrap/mixins";
+14: 
+15: // CSS Reset
+16: @import "compass_twitter_bootstrap/reset";
+
+Backtrace:
+_compass_twitter_bootstrap.scss:11
+/usr/lib/ruby/vendor_ruby/sass/../sass/tree/import_node.rb:64:in `import'
+/usr/lib/ruby/vendor_ruby/sass/../sass/tree/import_node.rb:25:in `imported_file'
+/usr/lib/ruby/vendor_ruby/sass/../sass/tree/visitors/perform.rb:149:in `visit_import'
+/usr/lib/ruby/vendor_ruby/sass/../sass/tree/visitors/base.rb:37:in `send'
+/usr/lib/ruby/vendor_ruby/sass/../sass/tree/visitors/base.rb:37:in `visit'
+/usr/lib/ruby/vendor_ruby/sass/../sass/tree/visitors/perform.rb:18:in `visit'
+/usr/lib/ruby/vendor_ruby/sass/../sass/tree/visitors/base.rb:53:in `visit_children'
+/usr/lib/ruby/vendor_ruby/sass/../sass/tree/visitors/base.rb:53:in `map'
+/usr/lib/ruby/vendor_ruby/sass/../sass/tree/visitors/base.rb:53:in `visit_children'
+/usr/lib/ruby/vendor_ruby/sass/../sass/tree/visitors/perform.rb:27:in `visit_children'
+/usr/lib/ruby/vendor_ruby/sass/../sass/tree/visitors/perform.rb:39:in `with_environment'
+/usr/lib/ruby/vendor_ruby/sass/../sass/tree/visitors/perform.rb:26:in `visit_children'
+/usr/lib/ruby/vendor_ruby/sass/../sass/tree/visitors/base.rb:37:in `visit'
+/usr/lib/ruby/vendor_ruby/sass/../sass/tree/visitors/perform.rb:47:in `visit_root'
+/usr/lib/ruby/vendor_ruby/sass/../sass/tree/visitors/base.rb:37:in `send'
+/usr/lib/ruby/vendor_ruby/sass/../sass/tree/visitors/base.rb:37:in `visit'
+/usr/lib/ruby/vendor_ruby/sass/../sass/tree/visitors/perform.rb:18:in `visit'
+/usr/lib/ruby/vendor_ruby/sass/../sass/tree/visitors/perform.rb:7:in `send'
+/usr/lib/ruby/vendor_ruby/sass/../sass/tree/visitors/perform.rb:7:in `visit'
+/usr/lib/ruby/vendor_ruby/sass/../sass/tree/root_node.rb:20:in `render'
+/usr/lib/ruby/vendor_ruby/sass/../sass/engine.rb:299:in `_render'
+/usr/lib/ruby/vendor_ruby/sass/../sass/engine.rb:246:in `render'
+/usr/lib/ruby/vendor_ruby/sass/../sass/plugin/compiler.rb:339:in `update_stylesheet'
+/usr/lib/ruby/vendor_ruby/sass/../sass/plugin/compiler.rb:202:in `update_stylesheets'
+/usr/lib/ruby/vendor_ruby/sass/../sass/plugin/compiler.rb:200:in `each'
+/usr/lib/ruby/vendor_ruby/sass/../sass/plugin/compiler.rb:200:in `update_stylesheets'
+/usr/lib/ruby/vendor_ruby/sass/../sass/plugin/compiler.rb:234:in `watch'
+/usr/lib/ruby/vendor_ruby/sass/../sass/plugin.rb:107:in `send'
+/usr/lib/ruby/vendor_ruby/sass/../sass/plugin.rb:107:in `method_missing'
+/usr/lib/ruby/vendor_ruby/sass/../sass/exec.rb:427:in `watch_or_update'
+/usr/lib/ruby/vendor_ruby/sass/../sass/exec.rb:302:in `process_result'
+/usr/lib/ruby/vendor_ruby/sass/../sass/exec.rb:41:in `parse'
+/usr/lib/ruby/vendor_ruby/sass/../sass/exec.rb:21:in `parse!'
+/usr/bin/sass:8
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Syntax error: File to import not found or unreadable: compass.\A               Load path: /home/ewag/projects/taboo/styles\A         on line 11 of _compass_twitter_bootstrap.scss\A \A 6:  * http://www.apache.org/licenses/LICENSE-2.0\A 7:  *\A 8:  * Designed and built with all the love in the world @twitter by @mdo and @fat.\A 9:  */\A 10: \A 11: @import \"compass\";\A 12: \A 13: @import \"compass_twitter_bootstrap/mixins\";\A 14: \A 15: // CSS Reset\A 16: @import \"compass_twitter_bootstrap/reset\";"; }
