@@ -1,11 +1,11 @@
 
-var CitiesApp = angular.module('CitiesApp', ['ngSanitize']);
+var CitiesApp = angular.module('CitiesApp', ['ngSanitize', 'localization']);
 
 CitiesApp
   .config(['$routeProvider', function($routeProvider) {
     $routeProvider.
         when('/connect', {templateUrl: 'partials/connect.html', controller: CitiesController}).
-        when('/home', {templateUrl: 'partials/home.html'}).
+        when('/home', {templateUrl: 'partials/home.html', controller: CitiesController}).
         when('/cities/:cityName', {templateUrl: 'partials/city.html',  controller: CityController}).
         otherwise({redirectTo: '/home'});
   }])
@@ -16,11 +16,44 @@ CitiesApp
   });
 
 
+  // define a value
+CitiesApp.value('myThing', 'weee');
 
-function CitiesController ($scope, $location, $http) {
+// use it in a service
+
+CitiesApp.factory('myService', ['myThing', function(myThing){
+
+   var aVar = 'aaa';
+   return {
+       whatsMyThing: function() { 
+          return 'myThing'; //weee
+       },
+       setMyThing: function() { 
+          return myThing; //weee
+       }
+    }
+}]);
+
+
+
+
+
+function LocaleController ($scope, $rootScope, $locale, localize, myThing, myService) {
   var sc = $scope;
+  sc.locales = [
+    {'id': 'en-US', 'name': 'English'}, 
+    {'id': 'pl-pl', 'name': 'Polish'}
+  ];
+  sc.localeId = $locale.id;
+  localize.setLanguage(sc.localeId);
+  sc.selectLocale = function() {
+    localize.setLanguage(sc.localeId);    
+  }
+};
 
-  sc.test = 'test';
+
+function CitiesController ($scope, $rootScope, $location, $http, $locale) {
+  var sc = $scope;
 
   $http.get('/api/cities').success(function(data) { 
     console.log(data);

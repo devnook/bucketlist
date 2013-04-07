@@ -1,12 +1,10 @@
-
-
 <div>
-Choose your city:
+{* '_ChooseYourCity_'| i18n *}:
 <select ng-model="city" ng-change="selectCity(city)">
   <option ng-repeat="city in cities" value="{*city.name*}">{*city.name*}</option>
 </select>
 
-You selected {* city *}
+{* '_YouSelectedCity_'| i18n *}: {* city *}
 </div>
 
 <div>

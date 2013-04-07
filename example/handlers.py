@@ -8,6 +8,8 @@ from webapp2_extras import auth, sessions, jinja2
 from jinja2.runtime import TemplateNotFound
 
 from simpleauth import SimpleAuthHandler
+from webapp2_extras import i18n
+
 
 def user_required(handler):
   """
@@ -97,6 +99,12 @@ class RootHandler(BaseRequestHandler):
   @user_required
   def get(self):
     """Handles default langing page"""
+    locale = self.request.GET.get('locale', 'en_US')
+    i18n.get_i18n().set_locale(locale)
+
+    message = i18n.gettext('Hello, world!')
+    logging.info(message)
+
     self.render('home.html')
 
 

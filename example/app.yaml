@@ -83,8 +83,14 @@ handlers:
   static_files: stylesheets/\1
   upload: stylesheets/(.*)
 
+- url: /stylesheets
+  static_dir: stylesheets
+
 - url: /scripts
   static_dir: scripts
+
+- url: /i18n
+  static_dir: i18n
 
 - url: /img
   static_dir: img

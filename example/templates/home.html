@@ -3,8 +3,16 @@
 
 
 {% block main %}
+  <div ng-controller="LocaleController">
+    <div>
+{* '_SelectLanguage_' | i18n*}:
+<select ng-model="localeId" ng-change="selectLocale()">
+  <option ng-repeat="locale in locales" value="{*locale.id*}">{*locale.name*}</option>
+</select> {* '_YouSelectedLanguage_' | i18n*}: {* localeId *}
+
+  </div>
   <div>
-    <div ng-controller="CitiesController">
+    <div>
       <div ng-view></div>
     </div>  
   </div>
