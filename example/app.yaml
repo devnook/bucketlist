@@ -83,6 +83,10 @@ handlers:
   static_files: stylesheets/\1
   upload: stylesheets/(.*)
 
+- url: /i18n/(.*)
+  static_files: i18n/\1
+  upload: i18n/(.*)
+
 - url: /stylesheets
   static_dir: stylesheets
 

@@ -51,6 +51,22 @@ function LocaleController ($scope, $rootScope, $locale, localize, myThing, mySer
   }
 };
 
+function GeoController ($scope, $http) {
+  var sc = $scope;
+  sc.test = 'GeolocationController';
+  var apiUrl = 'http://maps.googleapis.com/maps/api/geocode/json?sensor=false&latlng=';
+  /*
+  navigator.geolocation.getCurrentPosition(function (position) {
+    console.log(position);
+    var url = apiUrl + position.coords.latitude + ',' + position.coords.longitude;
+    console.log(url);
+    $http.get(url).success(function(data) {
+      console.log(data);
+    })
+  });
+  */
+};
+
 
 function CitiesController ($scope, $rootScope, $location, $http, $locale) {
   var sc = $scope;
