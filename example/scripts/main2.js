@@ -7,6 +7,7 @@ CitiesApp
         when('/connect', {templateUrl: 'partials/connect.html', controller: CitiesController}).
         when('/home', {templateUrl: 'partials/home.html', controller: CitiesController}).
         when('/cities/:cityName', {templateUrl: 'partials/city.html',  controller: CityController}).
+        when('/user/:userId', {templateUrl: 'partials/user.html',  controller: UserController}).
         otherwise({redirectTo: '/home'});
   }])
   .config(
@@ -35,7 +36,23 @@ CitiesApp.factory('myService', ['myThing', function(myThing){
 }]);
 
 
+function UserController ($scope, $http, $routeParams) {
+  var sc = $scope;
+  sc.userId = $routeParams.userId;
+  sc.user = null;
 
+  $http.get('/api/user/' + sc.userId).success(function(response) {
+    console.log(response)
+    if (response.user) {
+      sc.user = response.user;
+    }
+  });
+
+  sc.isUpvoted = function(activity) {
+    return activity.is_upvoted == 'true';
+  }
+  
+};
 
 
 function LocaleController ($scope, $rootScope, $locale, localize, myThing, myService) {

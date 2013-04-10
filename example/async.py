@@ -154,8 +154,30 @@ class Vote(handlers.BaseRequestHandler):
 class UserHandler(handlers.BaseRequestHandler):
 
   def get(self, user_id):    
-    if used_id == 'me':
-    logging.info(self.current_user)
-    response = {'activities': activities}
+    if user_id == 'me':
+      user = self.current_user
+    else:
+      user = self.auth.store.user_model.get_by_id(int(user_id))
+    if user:
+
+      activities_query = models.Activity.query(ndb.OR(
+        models.Activity.creator==user.key, 
+        models.Activity.upvoters == user.get_id(),
+        models.Activity.downvoters == user.get_id()
+        )
+      )
+      activities = [activity.to_dict(user_id=user.get_id()) for activity in activities_query]
+      logging.info(activities)
+      logging.info(activities_query)
+
+      response = {'user': {
+        'id': self.current_user.get_id(),
+        'avatar_url': self.current_user.avatar_url,
+        'name': self.current_user.name,
+        'activities': activities
+      }}
+    else:
+      response = {'error': 'User not found'}
     self.RenderJson(response)
+
 
