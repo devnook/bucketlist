@@ -7,7 +7,7 @@ import webapp2
 from webapp2_extras import auth, sessions, jinja2
 from jinja2.runtime import TemplateNotFound
 
-from simpleauth import SimpleAuthHandler
+from simpleauth.handler import SimpleAuthHandler
 from webapp2_extras import i18n
 
 

@@ -3,6 +3,7 @@ import sys
 from secrets import SESSION_KEY
 
 from webapp2 import WSGIApplication, Route
+import handlers
 
 # inject './lib' dir in the path so that we can simply do "import ndb" 
 # or whatever there's in the app lib dir.
@@ -37,6 +38,7 @@ routes = [
   Route('/api/cities/<city_name>/activity', handler='async.Activity', name='activity'),
   Route(r'/api/cities/<:\w+>/activity/<activity_id>/vote', handler='async.Vote', name='vote'),
   Route('/api/cities/<city_name>/activities', handler='async.Activities', name='activities'),
+  Route('/api/user/<:user_id>', handler='async.UserHandler', name='user'),
 ]
 
 app = WSGIApplication(routes, config=app_config, debug=True)

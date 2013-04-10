@@ -150,3 +150,12 @@ class Vote(handlers.BaseRequestHandler):
     response = {'activity': activity.to_dict(user_id=self.current_user.get_id())}
     self.RenderJson(response)
 
+
+class UserHandler(handlers.BaseRequestHandler):
+
+  def get(self, user_id):    
+    if used_id == 'me':
+    logging.info(self.current_user)
+    response = {'activities': activities}
+    self.RenderJson(response)
+
