@@ -1,0 +1,31 @@
+<h1><img src="{* user.avatar_url *}">{* user.name *}</h1>
+
+<h2>Activities proposed by this user</h2>
+
+<ul>
+  <li ng-repeat="activity in user.activities | filter:{creator.id:user.id}">
+    {* activity.name *} 
+  </li>
+</ul>
+
+<h2>Activities liked by this user</h2>
+
+<ul>
+  <li ng-repeat="activity in user.activities | filter:{is_upvoted:true}">
+    {* activity.name *} 
+  </li>
+</ul>
+
+<h2>Activities disliked by this user</h2>
+
+<ul>
+  <li ng-repeat="activity in user.activities | filter:{is_downvoted:true}">
+    {* activity.name *} 
+  </li>
+</ul>
+
+
+
+
+
+
