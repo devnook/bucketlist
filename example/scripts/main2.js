@@ -59,7 +59,7 @@ function LocaleController ($scope, $rootScope, $locale, localize, myThing, mySer
   var sc = $scope;
   sc.locales = [
     {'id': 'en-US', 'name': 'English'}, 
-    {'id': 'pl-pl', 'name': 'Polish'}
+    {'id': 'pl-pl', 'name': 'Polski'}
   ];
   sc.localeId = $locale.id;
   localize.setLanguage(sc.localeId);
@@ -70,7 +70,7 @@ function LocaleController ($scope, $rootScope, $locale, localize, myThing, mySer
 
 function GeoController ($scope, $http) {
   var sc = $scope;
-  sc.test = 'GeolocationController';
+  sc.test = '';
   var apiUrl = 'http://maps.googleapis.com/maps/api/geocode/json?sensor=false&latlng=';
   /*
   navigator.geolocation.getCurrentPosition(function (position) {
