@@ -44,6 +44,7 @@ class City(ndb.Model):
 
 class Activity(ndb.Model):
   name = ndb.StringProperty(required=True)
+  description = ndb.StringProperty(required=True)
   city = ndb.KeyProperty(kind=City)
   creator = ndb.KeyProperty(kind=User)
   upvoters = ndb.IntegerProperty(repeated=True)
@@ -54,6 +55,7 @@ class Activity(ndb.Model):
     result = {
       'id': self.key.id(),
       'name': self.name,
+      'description': self.description,
       'city': self.city.get().to_dict(),
       'upvotes': len(self.upvoters),
       'downvotes': len(self.downvoters),

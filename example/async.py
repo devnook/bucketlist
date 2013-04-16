@@ -104,11 +104,21 @@ class Cities(handlers.BaseRequestHandler):
 
 class Activity(handlers.BaseRequestHandler):
 
+  def get(self, activity_id):
+    activity = models.Activity.get_by_id(int(activity_id))
+    user_id = self.current_user.get_id() if self.current_user else None
+    response = {'activity': activity.to_dict(user_id=user_id)}
+    self.RenderJson(response)
+
   @user_required
   def post(self, city_name):
     activity = self.request.get('activity')
+    description = self.request.get('activity_description')
     city = models.City.query(models.City.name == city_name).get()
-    new_activity = models.Activity(name=activity, city=city.key, creator=self.current_user.key)
+    new_activity = models.Activity(name=activity, 
+                                   description=description,
+                                   city=city.key, 
+                                   creator=self.current_user.key)
     new_activity.put()
     response = {'message': 'Saved.', 'activity': new_activity.to_dict()}
     self.RenderJson(response)
@@ -167,13 +177,11 @@ class UserHandler(handlers.BaseRequestHandler):
         )
       )
       activities = [activity.to_dict(user_id=user.get_id()) for activity in activities_query]
-      logging.info(activities)
-      logging.info(activities_query)
 
       response = {'user': {
-        'id': self.current_user.get_id(),
-        'avatar_url': self.current_user.avatar_url,
-        'name': self.current_user.name,
+        'id': user.get_id(),
+        'avatar_url': user.avatar_url,
+        'name': user.name,
         'activities': activities
       }}
     else:

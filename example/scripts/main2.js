@@ -7,6 +7,7 @@ CitiesApp
         when('/connect', {templateUrl: 'partials/connect.html', controller: CitiesController}).
         when('/home', {templateUrl: 'partials/home.html', controller: CitiesController}).
         when('/cities/:cityName', {templateUrl: 'partials/city.html',  controller: CityController}).
+        when('/activity/:activityId', {templateUrl: 'partials/activity.html',  controller: ActivityController}).
         when('/user/:userId', {templateUrl: 'partials/user.html',  controller: UserController}).
         otherwise({redirectTo: '/home'});
   }])
@@ -85,6 +86,18 @@ function GeoController ($scope, $http) {
 };
 
 
+function ActivityController ($scope, $routeParams, $http, $locale) {
+  var sc = $scope;
+
+  $http.get('/api/activity/' + $routeParams.activityId).success(function(data) { 
+    console.log(data);
+    sc.activity = data['activity'];
+  });
+
+  
+};
+
+
 function CitiesController ($scope, $rootScope, $location, $http, $locale) {
   var sc = $scope;
 
@@ -132,7 +145,8 @@ function CityController ($scope, $routeParams, $http) {
   sc.addActivity = function() {
     data = {
       'city': sc.city,
-      'activity': sc.newActivity
+      'activity': sc.newActivity,
+      'activity_description': sc.newActivityDesc,
     }
     $http({
         method: 'POST',
