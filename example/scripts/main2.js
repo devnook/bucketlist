@@ -1,5 +1,5 @@
 
-var CitiesApp = angular.module('CitiesApp', ['ngSanitize', 'localization']);
+var CitiesApp = angular.module('CitiesApp', ['ngSanitize', 'localization', 'ngResource']);
 
 CitiesApp
   .config(['$routeProvider', function($routeProvider) {
@@ -35,6 +35,9 @@ CitiesApp.factory('myService', ['myThing', function(myThing){
        }
     }
 }]);
+
+
+
 
 
 function UserController ($scope, $http, $routeParams) {
@@ -86,15 +89,32 @@ function GeoController ($scope, $http) {
 };
 
 
-function ActivityController ($scope, $routeParams, $http, $locale) {
+function ActivityController ($scope, $resource, $routeParams, $http, $locale) {
   var sc = $scope;
 
-  $http.get('/api/activity/' + $routeParams.activityId).success(function(data) {
-    console.log(data);
-    sc.activity = data['activity'];
-  });
+  var Activity = $resource(
+    '/activity/:activityId/:verb',
+    {activityId:'@id'},
+    {
+      vote: {method:'POST', params:{verb: 'vote'}},
+      fav: {method:'POST', params:{verb: 'fav'}},
+      done: {method:'POST', params:{verb: 'done'}}
+    }
+  );
 
+  sc.activity = Activity.get({activityId: $routeParams.activityId});
 
+  sc.vote = function(vote) {
+    sc.activity.$vote({'vote': vote});
+  };
+
+  sc.fav = function(add_to_fav) {
+    sc.activity.$fav({'add_to_fav': add_to_fav});
+  };
+
+  sc.done = function(add_to_done) {
+    sc.activity.$done({'add_to_done': add_to_done});
+  };
 };
 
 
@@ -131,7 +151,9 @@ function CitiesController ($scope, $rootScope, $location, $http, $locale) {
 };
 
 
-function CityController ($scope, $routeParams, $http) {
+
+
+function CityController ($scope, $routeParams, $http, $resource) {
   var sc = $scope;
 
   sc.city = $routeParams.cityName;

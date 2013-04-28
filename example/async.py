@@ -107,7 +107,7 @@ class Activity(handlers.BaseRequestHandler):
   def get(self, activity_id):
     activity = models.Activity.get_by_id(int(activity_id))
     user_id = self.current_user.get_id() if self.current_user else None
-    response = {'activity': activity.to_dict(user_id=user_id)}
+    response = activity.to_dict(user_id=user_id)
     self.RenderJson(response)
 
   @user_required
@@ -123,28 +123,12 @@ class Activity(handlers.BaseRequestHandler):
     response = {'message': 'Saved.', 'activity': new_activity.to_dict()}
     self.RenderJson(response)
 
-class Activities(handlers.BaseRequestHandler):
-
-  def get(self, city_name):
-    city = models.City.query(models.City.name == city_name).get()
-    activities_query = models.Activity.query(models.Activity.city==city.key)
-    activities = [activity.to_dict(user_id=self.current_user.get_id()) for activity in activities_query]
-    response = {'activities': activities}
-    self.RenderJson(response)
-
-
-
-
-class Vote(handlers.BaseRequestHandler):
-
   @user_required
-  def post(self, activity_id):
+  def vote(self, activity_id):
     activity = models.Activity.get_by_id(int(activity_id))
     vote = int(self.request.get('vote'))
     # check for deduping
     user_id = self.current_user.get_id()
-
-
 
     if vote > 0:
       if user_id in activity.downvoters:
@@ -157,14 +141,11 @@ class Vote(handlers.BaseRequestHandler):
       elif user_id not in activity.downvoters:
         activity.downvoters.append(self.current_user.get_id())
     activity.put()
-    response = {'activity': activity.to_dict(user_id=self.current_user.get_id())}
+    response = activity.to_dict(user_id=self.current_user.get_id())
     self.RenderJson(response)
 
-
-class Fav(handlers.BaseRequestHandler):
-
   @user_required
-  def post(self, activity_id):
+  def fav(self, activity_id):
     activity = models.Activity.get_by_id(int(activity_id))
     add_to_fav = self.request.get('add_to_fav') == 'true'
     logging.info(add_to_fav)
@@ -179,13 +160,10 @@ class Fav(handlers.BaseRequestHandler):
         activity.followers.remove(user_id)
 
     activity.put()
-    response = {'activity': activity.to_dict(user_id=self.current_user.get_id())}
-    self.RenderJson(response)
-
-class Done(handlers.BaseRequestHandler):
+    self.RenderJson(activity.to_dict(user_id=self.current_user.get_id()))
 
   @user_required
-  def post(self, activity_id):
+  def done(self, activity_id):
     activity = models.Activity.get_by_id(int(activity_id))
     add_to_done = self.request.get('add_to_done') == 'true'
     # check for deduping
@@ -197,8 +175,24 @@ class Done(handlers.BaseRequestHandler):
         activity.doers.remove(user_id)
 
     activity.put()
-    response = {'activity': activity.to_dict(user_id=self.current_user.get_id())}
+    self.RenderJson(activity.to_dict(user_id=self.current_user.get_id()))
+
+class Activities(handlers.BaseRequestHandler):
+
+  def get(self, city_name):
+    city = models.City.query(models.City.name == city_name).get()
+    activities_query = models.Activity.query(models.Activity.city==city.key)
+    activities = [activity.to_dict(user_id=self.current_user.get_id()) for activity in activities_query]
+    response = {'activities': activities}
     self.RenderJson(response)
+
+
+
+
+
+
+
+
 
 
 class UserHandler(handlers.BaseRequestHandler):
@@ -214,8 +208,8 @@ class UserHandler(handlers.BaseRequestHandler):
         models.Activity.creator==user.key,
         models.Activity.upvoters == user.get_id(),
         models.Activity.downvoters == user.get_id(),
-        models.Activity.doers == user.get_id(),
-        models.Activity.followers == user.get_id()
+        models.Activity.followers == user.get_id(),
+        models.Activity.doers == user.get_id()
         )
       )
       activities = [activity.to_dict(user_id=user.get_id()) for activity in activities_query]
