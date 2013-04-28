@@ -201,6 +201,26 @@ function CityController ($scope, $routeParams, $http) {
       }
     });
   }
+
+  sc.done = function(activityId, addToDone) {
+    console.log(activityId);
+    data = {
+      'add_to_done': addToDone
+    };
+    $http({
+        method: 'POST',
+        url: '/api/cities/' + sc.city + '/activity/' + activityId + '/done',
+        data: $.param(data),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    }).success(function(response) {
+      console.log(response);
+      for (var i = 0, activity; activity = sc.activities[i]; i++) {
+        if (activity.id === response.activity.id) {
+          sc.activities[i] = response.activity;
+        }
+      }
+    });
+  }
 };
 
 

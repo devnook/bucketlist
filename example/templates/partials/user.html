@@ -34,6 +34,14 @@
   </li>
 </ul>
 
+<h2>Activities this user has done already</h2>
+
+<ul>
+  <li ng-repeat="activity in user.activities | filter:{is_done:true}">
+    {* activity.name *}
+  </li>
+</ul>
+
 
 
 

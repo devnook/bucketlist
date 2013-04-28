@@ -39,6 +39,7 @@ routes = [
   Route('/api/activity/<activity_id>', handler='async.Activity', name='activity'),
   Route(r'/api/cities/<:\w+>/activity/<activity_id>/vote', handler='async.Vote', name='vote'),
   Route(r'/api/cities/<:\w+>/activity/<activity_id>/fav', handler='async.Fav', name='fav'),
+  Route(r'/api/cities/<:\w+>/activity/<activity_id>/done', handler='async.Done', name='done'),
   Route('/api/cities/<city_name>/activities', handler='async.Activities', name='activities'),
   Route('/api/user/<user_id>', handler='async.UserHandler', name='user'),
 ]

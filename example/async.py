@@ -182,6 +182,24 @@ class Fav(handlers.BaseRequestHandler):
     response = {'activity': activity.to_dict(user_id=self.current_user.get_id())}
     self.RenderJson(response)
 
+class Done(handlers.BaseRequestHandler):
+
+  @user_required
+  def post(self, activity_id):
+    activity = models.Activity.get_by_id(int(activity_id))
+    add_to_done = self.request.get('add_to_done') == 'true'
+    # check for deduping
+    user_id = self.current_user.get_id()
+
+    if add_to_done and user_id not in activity.doers:
+        activity.doers.append(user_id)
+    elif not add_to_done and user_id in activity.doers:
+        activity.doers.remove(user_id)
+
+    activity.put()
+    response = {'activity': activity.to_dict(user_id=self.current_user.get_id())}
+    self.RenderJson(response)
+
 
 class UserHandler(handlers.BaseRequestHandler):
 
@@ -195,7 +213,9 @@ class UserHandler(handlers.BaseRequestHandler):
       activities_query = models.Activity.query(ndb.OR(
         models.Activity.creator==user.key,
         models.Activity.upvoters == user.get_id(),
-        models.Activity.downvoters == user.get_id()
+        models.Activity.downvoters == user.get_id(),
+        models.Activity.doers == user.get_id(),
+        models.Activity.followers == user.get_id()
         )
       )
       activities = [activity.to_dict(user_id=user.get_id()) for activity in activities_query]

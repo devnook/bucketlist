@@ -21,7 +21,9 @@
   	<a ng-click="vote(activity.id, true)" href="">yay:)</a> /
     <a ng-click="vote(activity.id, false)" href="">nay:(</a> ///
     <a ng-show="!activity.is_faved" ng-click="fav(activity.id, true)" href="">I want to do this!</a>
-  	<a ng-show="activity.is_faved" ng-click="fav(activity.id, false)" href="">Remove from my list</a>
+    <a ng-show="activity.is_faved" ng-click="fav(activity.id, false)" href="">Remove from my list</a> //
+    <a ng-show="!activity.is_done" ng-click="done(activity.id, true)" href="">I've done that</a>
+  	<a ng-show="activity.is_done" ng-click="done(activity.id, false)" href="">Remove from my done list</a>
     <p ng-show="activity.description">{* activity.description*}</p>
   </li>
 

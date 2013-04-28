@@ -50,6 +50,7 @@ class Activity(ndb.Model):
   upvoters = ndb.IntegerProperty(repeated=True)
   downvoters = ndb.IntegerProperty(repeated=True)
   followers = ndb.IntegerProperty(repeated=True)
+  doers = ndb.IntegerProperty(repeated=True)
 
   def to_dict(self, user_id=None):
 
@@ -63,6 +64,7 @@ class Activity(ndb.Model):
       'is_upvoted': user_id in self.upvoters,
       'is_downvoted': user_id in self.downvoters,
       'is_faved': user_id in self.followers,
+      'is_done': user_id in self.doers,
     }
     if self.creator:
       creator = self.creator.get()
