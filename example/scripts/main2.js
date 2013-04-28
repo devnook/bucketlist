@@ -27,10 +27,10 @@ CitiesApp.factory('myService', ['myThing', function(myThing){
 
    var aVar = 'aaa';
    return {
-       whatsMyThing: function() { 
+       whatsMyThing: function() {
           return 'myThing'; //weee
        },
-       setMyThing: function() { 
+       setMyThing: function() {
           return myThing; //weee
        }
     }
@@ -52,20 +52,20 @@ function UserController ($scope, $http, $routeParams) {
   sc.isUpvoted = function(activity) {
     return activity.is_upvoted == 'true';
   }
-  
+
 };
 
 
 function LocaleController ($scope, $rootScope, $locale, localize, myThing, myService) {
   var sc = $scope;
   sc.locales = [
-    {'id': 'en-US', 'name': 'English'}, 
+    {'id': 'en-US', 'name': 'English'},
     {'id': 'pl-pl', 'name': 'Polski'}
   ];
   sc.localeId = $locale.id;
   localize.setLanguage(sc.localeId);
   sc.selectLocale = function() {
-    localize.setLanguage(sc.localeId);    
+    localize.setLanguage(sc.localeId);
   }
 };
 
@@ -89,19 +89,19 @@ function GeoController ($scope, $http) {
 function ActivityController ($scope, $routeParams, $http, $locale) {
   var sc = $scope;
 
-  $http.get('/api/activity/' + $routeParams.activityId).success(function(data) { 
+  $http.get('/api/activity/' + $routeParams.activityId).success(function(data) {
     console.log(data);
     sc.activity = data['activity'];
   });
 
-  
+
 };
 
 
 function CitiesController ($scope, $rootScope, $location, $http, $locale) {
   var sc = $scope;
 
-  $http.get('/api/cities').success(function(data) { 
+  $http.get('/api/cities').success(function(data) {
     console.log(data);
     sc.cities = data['cities'];
   });
@@ -109,7 +109,7 @@ function CitiesController ($scope, $rootScope, $location, $http, $locale) {
   sc.isCurrentRoute = function(route) {
     return route === $location.path().substring(1);
   };
-  
+
 
   sc.addCity = function(city) {
     $http({
@@ -117,12 +117,12 @@ function CitiesController ($scope, $rootScope, $location, $http, $locale) {
         url: '/api/cities',
         data: $.param({'city': city}),
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    }).success(function(response) { 
+    }).success(function(response) {
       console.log(response);
       sc.cities.push(response.city);
-      
+
     });
-    
+
   };
 
   sc.selectCity = function(city) {
@@ -153,10 +153,10 @@ function CityController ($scope, $routeParams, $http) {
         url: '/api/cities/' + sc.city + '/activity',
         data: $.param(data),
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    }).success(function(response) { 
+    }).success(function(response) {
       console.log(response);
       sc.activities.push(response.activity);
-      
+
     });
 
   };
@@ -172,17 +172,34 @@ function CityController ($scope, $routeParams, $http) {
         url: '/api/cities/' + sc.city + '/activity/' + activityId + '/vote',
         data: $.param(data),
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    }).success(function(response) { 
+    }).success(function(response) {
       console.log(response);
       for (var i = 0, activity; activity = sc.activities[i]; i++) {
         if (activity.id === response.activity.id) {
           sc.activities[i] = response.activity;
         }
       }
-      
-      
     });
+  };
 
+  sc.fav = function(activityId, addToFav) {
+    console.log(activityId);
+    data = {
+      'add_to_fav': addToFav
+    };
+    $http({
+        method: 'POST',
+        url: '/api/cities/' + sc.city + '/activity/' + activityId + '/fav',
+        data: $.param(data),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    }).success(function(response) {
+      console.log(response);
+      for (var i = 0, activity; activity = sc.activities[i]; i++) {
+        if (activity.id === response.activity.id) {
+          sc.activities[i] = response.activity;
+        }
+      }
+    });
   }
 };
 
@@ -272,7 +289,7 @@ cities.helper = (function() {
             $('<p><img src=\"' + profile.image.url + '\"></p>'));
         $('#profile').append(
             $('<p>Hello ' + profile.displayName + '!'));
-        
+
       });
     }
   };

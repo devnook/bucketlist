@@ -5,7 +5,7 @@
 
 <ul>
   <li ng-repeat="activity in user.activities | filter:{creator.id:user.id}">
-    {* activity.name *} 
+    {* activity.name *}
   </li>
 </ul>
 
@@ -13,7 +13,7 @@
 
 <ul>
   <li ng-repeat="activity in user.activities | filter:{is_upvoted:true}">
-    {* activity.name *} 
+    {* activity.name *}
   </li>
 </ul>
 
@@ -21,7 +21,16 @@
 
 <ul>
   <li ng-repeat="activity in user.activities | filter:{is_downvoted:true}">
-    {* activity.name *} 
+    {* activity.name *}
+  </li>
+</ul>
+
+
+<h2>Activities this user wants to do</h2>
+
+<ul>
+  <li ng-repeat="activity in user.activities | filter:{is_faved:true}">
+    {* activity.name *}
   </li>
 </ul>
 

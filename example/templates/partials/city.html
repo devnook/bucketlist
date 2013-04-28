@@ -1,7 +1,7 @@
 <h1>{* city *}</h1>
 
 <div>
-  Add new activity: 
+  Add new activity:
   <input ng-model="newActivity"><br>
   <textarea ng-model="newActivityDesc" placeholder="description"></textarea><br>
   <button ng-click="addActivity()">add</button>
@@ -13,13 +13,15 @@
   <li ng-hide="activities.length">No activities proposed for this city yet.</li>
   <li ng-repeat="activity in activities">
   	<a href="#/activity/{*activity.id *}">{*activity.name*}</a>
-  	
+
   	<em>by <a href="#/user/{*activity.creator.id *}">{* activity.creator.name *}</a>
-  	 +{* activity.upvotes*} / -{* activity.downvotes*} / 
+  	 +{* activity.upvotes*} / -{* activity.downvotes*} /
   	 total {* activity.upvotes - activity.downvotes*}</em>
-    
+
   	<a ng-click="vote(activity.id, true)" href="">yay:)</a> /
-  	<a ng-click="vote(activity.id, false)" href="">nay:(</a>
+    <a ng-click="vote(activity.id, false)" href="">nay:(</a> ///
+    <a ng-show="!activity.is_faved" ng-click="fav(activity.id, true)" href="">I want to do this!</a>
+  	<a ng-show="activity.is_faved" ng-click="fav(activity.id, false)" href="">Remove from my list</a>
     <p ng-show="activity.description">{* activity.description*}</p>
   </li>
 

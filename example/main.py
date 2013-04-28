@@ -5,7 +5,7 @@ from secrets import SESSION_KEY
 from webapp2 import WSGIApplication, Route
 import handlers
 
-# inject './lib' dir in the path so that we can simply do "import ndb" 
+# inject './lib' dir in the path so that we can simply do "import ndb"
 # or whatever there's in the app lib dir.
 if 'lib' not in sys.path:
     sys.path[0:0] = ['lib']
@@ -20,24 +20,25 @@ app_config = {
     'user_attributes': []
   }
 }
-    
+
 # Map URLs to handlers
 routes = [
-  Route('/', handler='handlers.RootHandler'),  
+  Route('/', handler='handlers.RootHandler'),
 
   Route('/login', handler='handlers.LoginHandler', name='login'),
   Route('/profile', handler='handlers.ProfileHandler', name='profile'),
-  
+
   Route('/logout', handler='handlers.AuthHandler:logout', name='logout'),
-  Route('/auth/<provider>', 
+  Route('/auth/<provider>',
     handler='handlers.AuthHandler:_simple_auth', name='auth_login'),
-  Route('/auth/<provider>/callback', 
+  Route('/auth/<provider>/callback',
     handler='handlers.AuthHandler:_auth_callback', name='auth_callback'),
 
   Route('/api/cities', handler='async.Cities', name='cities'),
   Route('/api/cities/<city_name>/activity', handler='async.Activity', name='activity'),
   Route('/api/activity/<activity_id>', handler='async.Activity', name='activity'),
   Route(r'/api/cities/<:\w+>/activity/<activity_id>/vote', handler='async.Vote', name='vote'),
+  Route(r'/api/cities/<:\w+>/activity/<activity_id>/fav', handler='async.Fav', name='fav'),
   Route('/api/cities/<city_name>/activities', handler='async.Activities', name='activities'),
   Route('/api/user/<user_id>', handler='async.UserHandler', name='user'),
 ]

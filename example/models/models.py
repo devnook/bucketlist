@@ -5,7 +5,7 @@ from google.appengine.ext import db
 
 from webapp2_extras.appengine.auth.models import User
 
-from google.appengine.api import users 
+from google.appengine.api import users
 from google.appengine.ext import ndb
 
 
@@ -49,6 +49,7 @@ class Activity(ndb.Model):
   creator = ndb.KeyProperty(kind=User)
   upvoters = ndb.IntegerProperty(repeated=True)
   downvoters = ndb.IntegerProperty(repeated=True)
+  followers = ndb.IntegerProperty(repeated=True)
 
   def to_dict(self, user_id=None):
 
@@ -61,6 +62,7 @@ class Activity(ndb.Model):
       'downvotes': len(self.downvoters),
       'is_upvoted': user_id in self.upvoters,
       'is_downvoted': user_id in self.downvoters,
+      'is_faved': user_id in self.followers,
     }
     if self.creator:
       creator = self.creator.get()
@@ -75,5 +77,4 @@ class Activity(ndb.Model):
 
 
 
-  
- 
+

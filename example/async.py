@@ -47,7 +47,7 @@ class GetStateHandler(abstract_handler.AbstractHandler):
       self.redirect(users.create_login_url(self.request.uri))
       return
 
-    
+
     message = 'hello'
 
     client_id = user.user_id() + 'aaa'
@@ -62,7 +62,7 @@ class OpenChannel(abstract_handler.AbstractHandler):
       self.redirect(users.create_login_url(self.request.uri))
       return
 
-    
+
     client_id = user.nickname()
     token = channel.create_channel(client_id)
     response = {
@@ -115,9 +115,9 @@ class Activity(handlers.BaseRequestHandler):
     activity = self.request.get('activity')
     description = self.request.get('activity_description')
     city = models.City.query(models.City.name == city_name).get()
-    new_activity = models.Activity(name=activity, 
+    new_activity = models.Activity(name=activity,
                                    description=description,
-                                   city=city.key, 
+                                   city=city.key,
                                    creator=self.current_user.key)
     new_activity.put()
     response = {'message': 'Saved.', 'activity': new_activity.to_dict()}
@@ -125,7 +125,7 @@ class Activity(handlers.BaseRequestHandler):
 
 class Activities(handlers.BaseRequestHandler):
 
-  def get(self, city_name):    
+  def get(self, city_name):
     city = models.City.query(models.City.name == city_name).get()
     activities_query = models.Activity.query(models.Activity.city==city.key)
     activities = [activity.to_dict(user_id=self.current_user.get_id()) for activity in activities_query]
@@ -138,13 +138,13 @@ class Activities(handlers.BaseRequestHandler):
 class Vote(handlers.BaseRequestHandler):
 
   @user_required
-  def post(self, activity_id):   
-    activity = models.Activity.get_by_id(int(activity_id))    
+  def post(self, activity_id):
+    activity = models.Activity.get_by_id(int(activity_id))
     vote = int(self.request.get('vote'))
     # check for deduping
     user_id = self.current_user.get_id()
 
-   
+
 
     if vote > 0:
       if user_id in activity.downvoters:
@@ -161,9 +161,31 @@ class Vote(handlers.BaseRequestHandler):
     self.RenderJson(response)
 
 
+class Fav(handlers.BaseRequestHandler):
+
+  @user_required
+  def post(self, activity_id):
+    activity = models.Activity.get_by_id(int(activity_id))
+    add_to_fav = self.request.get('add_to_fav') == 'true'
+    logging.info(add_to_fav)
+    # check for deduping
+    user_id = self.current_user.get_id()
+
+    if add_to_fav:
+      if user_id not in activity.followers:
+        activity.followers.append(user_id)
+    else:
+      if user_id in activity.followers:
+        activity.followers.remove(user_id)
+
+    activity.put()
+    response = {'activity': activity.to_dict(user_id=self.current_user.get_id())}
+    self.RenderJson(response)
+
+
 class UserHandler(handlers.BaseRequestHandler):
 
-  def get(self, user_id):    
+  def get(self, user_id):
     if user_id == 'me':
       user = self.current_user
     else:
@@ -171,7 +193,7 @@ class UserHandler(handlers.BaseRequestHandler):
     if user:
 
       activities_query = models.Activity.query(ndb.OR(
-        models.Activity.creator==user.key, 
+        models.Activity.creator==user.key,
         models.Activity.upvoters == user.get_id(),
         models.Activity.downvoters == user.get_id()
         )
