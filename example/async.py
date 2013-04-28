@@ -104,7 +104,7 @@ class Cities(handlers.BaseRequestHandler):
 
 class Activity(handlers.BaseRequestHandler):
 
-  def get(self, activity_id):
+  def get(self, city_name, activity_id):
     activity = models.Activity.get_by_id(int(activity_id))
     user_id = self.current_user.get_id() if self.current_user else None
     response = activity.to_dict(user_id=user_id)
@@ -124,7 +124,7 @@ class Activity(handlers.BaseRequestHandler):
     self.RenderJson(response)
 
   @user_required
-  def vote(self, activity_id):
+  def vote(self, city_name, activity_id):
     activity = models.Activity.get_by_id(int(activity_id))
     vote = int(self.request.get('vote'))
     # check for deduping
@@ -145,7 +145,7 @@ class Activity(handlers.BaseRequestHandler):
     self.RenderJson(response)
 
   @user_required
-  def fav(self, activity_id):
+  def fav(self, city_name, activity_id):
     activity = models.Activity.get_by_id(int(activity_id))
     add_to_fav = self.request.get('add_to_fav') == 'true'
     logging.info(add_to_fav)
@@ -163,7 +163,7 @@ class Activity(handlers.BaseRequestHandler):
     self.RenderJson(activity.to_dict(user_id=self.current_user.get_id()))
 
   @user_required
-  def done(self, activity_id):
+  def done(self, city_name, activity_id):
     activity = models.Activity.get_by_id(int(activity_id))
     add_to_done = self.request.get('add_to_done') == 'true'
     # check for deduping
@@ -177,22 +177,11 @@ class Activity(handlers.BaseRequestHandler):
     activity.put()
     self.RenderJson(activity.to_dict(user_id=self.current_user.get_id()))
 
-class Activities(handlers.BaseRequestHandler):
-
-  def get(self, city_name):
+  def list(self, city_name):
     city = models.City.query(models.City.name == city_name).get()
     activities_query = models.Activity.query(models.Activity.city==city.key)
     activities = [activity.to_dict(user_id=self.current_user.get_id()) for activity in activities_query]
-    response = {'activities': activities}
-    self.RenderJson(response)
-
-
-
-
-
-
-
-
+    self.RenderJson(activities)
 
 
 class UserHandler(handlers.BaseRequestHandler):

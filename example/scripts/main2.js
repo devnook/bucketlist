@@ -7,7 +7,7 @@ CitiesApp
         when('/connect', {templateUrl: 'partials/connect.html', controller: CitiesController}).
         when('/home', {templateUrl: 'partials/home.html', controller: CitiesController}).
         when('/cities/:cityName', {templateUrl: 'partials/city.html',  controller: CityController}).
-        when('/activity/:activityId', {templateUrl: 'partials/activity.html',  controller: ActivityController}).
+        when('/city/:cityName/activity/:activityId', {templateUrl: 'partials/activity.html',  controller: ActivityController}).
         when('/user/:userId', {templateUrl: 'partials/user.html',  controller: UserController}).
         otherwise({redirectTo: '/home'});
   }])
@@ -20,6 +20,8 @@ CitiesApp
 
   // define a value
 CitiesApp.value('myThing', 'weee');
+
+
 
 // use it in a service
 
@@ -93,8 +95,8 @@ function ActivityController ($scope, $resource, $routeParams, $http, $locale) {
   var sc = $scope;
 
   var Activity = $resource(
-    '/activity/:activityId/:verb',
-    {activityId:'@id'},
+    '/city/:cityName/activity/:activityId/:verb',
+    {activityId:'@id', cityName: $routeParams.cityName},
     {
       vote: {method:'POST', params:{verb: 'vote'}},
       fav: {method:'POST', params:{verb: 'fav'}},
@@ -159,6 +161,31 @@ function CityController ($scope, $routeParams, $http, $resource) {
   sc.city = $routeParams.cityName;
   sc.activities = [];
 
+  var Activity = $resource(
+    '/city/:cityName/activity/:activityId/:verb',
+    {activityId:'@id', cityName: $routeParams.cityName},
+    {
+      vote: {method:'POST', params:{verb: 'vote'}},
+      fav: {method:'POST', params:{verb: 'fav'}},
+      done: {method:'POST', params:{verb: 'done'}}
+    }
+  );
+
+  sc.activities = Activity.query();
+
+  sc.vote = function(activity, vote) {
+    activity.$vote({'vote': vote});
+  };
+
+  sc.fav = function(activity, add_to_fav) {
+    activity.$fav({'add_to_fav': add_to_fav});
+  };
+
+  sc.done = function(activity, add_to_done) {
+    activity.$done({'add_to_done': add_to_done});
+  };
+
+  /*
   $http.get('/api/cities/' + sc.city + '/activities').success(function(response) {
     console.log(response);
     sc.activities = response.activities;
@@ -182,67 +209,8 @@ function CityController ($scope, $routeParams, $http, $resource) {
     });
 
   };
+  */
 
-  sc.vote = function(activityId, up) {
-    console.log(activityId);
-    var vote = up ? 1 : -1;
-    data = {
-      'vote': vote
-    }
-    $http({
-        method: 'POST',
-        url: '/api/cities/' + sc.city + '/activity/' + activityId + '/vote',
-        data: $.param(data),
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    }).success(function(response) {
-      console.log(response);
-      for (var i = 0, activity; activity = sc.activities[i]; i++) {
-        if (activity.id === response.activity.id) {
-          sc.activities[i] = response.activity;
-        }
-      }
-    });
-  };
-
-  sc.fav = function(activityId, addToFav) {
-    console.log(activityId);
-    data = {
-      'add_to_fav': addToFav
-    };
-    $http({
-        method: 'POST',
-        url: '/api/cities/' + sc.city + '/activity/' + activityId + '/fav',
-        data: $.param(data),
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    }).success(function(response) {
-      console.log(response);
-      for (var i = 0, activity; activity = sc.activities[i]; i++) {
-        if (activity.id === response.activity.id) {
-          sc.activities[i] = response.activity;
-        }
-      }
-    });
-  }
-
-  sc.done = function(activityId, addToDone) {
-    console.log(activityId);
-    data = {
-      'add_to_done': addToDone
-    };
-    $http({
-        method: 'POST',
-        url: '/api/cities/' + sc.city + '/activity/' + activityId + '/done',
-        data: $.param(data),
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    }).success(function(response) {
-      console.log(response);
-      for (var i = 0, activity; activity = sc.activities[i]; i++) {
-        if (activity.id === response.activity.id) {
-          sc.activities[i] = response.activity;
-        }
-      }
-    });
-  }
 };
 
 

@@ -40,13 +40,14 @@ routes = [
   Route(r'/api/cities/<:\w+>/activity/<activity_id>/vote', handler='async.Vote', name='vote'),
   Route(r'/api/cities/<:\w+>/activity/<activity_id>/fav', handler='async.Fav', name='fav'),
   Route(r'/api/cities/<:\w+>/activity/<activity_id>/done', handler='async.Done', name='done'),
-  Route('/api/cities/<city_name>/activities', handler='async.Activities', name='activities'),
+  #Route('/api/cities/<city_name>/activities', handler='async.Activities', name='activities'),
   Route('/api/user/<user_id>', handler='async.UserHandler', name='user'),
 
-  Route(r'/activity/<activity_id>', handler='async.Activity', name='activity'),
-  Route(r'/activity/<activity_id>/vote', handler='async.Activity', name='vote', handler_method="vote"),
-  Route(r'/activity/<activity_id>/fav', handler='async.Activity', name='fav', handler_method="fav"),
-  Route(r'/activity/<activity_id>/done', handler='async.Activity', name='done', handler_method="done"),
+  Route(r'/city/<city_name>/activity', handler='async.Activity', name='activity', handler_method="list"),
+  Route(r'/city/<city_name>/activity/<activity_id>', handler='async.Activity', name='activity'),
+  Route(r'/city/<city_name>/activity/<activity_id>/vote', handler='async.Activity', name='vote', handler_method="vote"),
+  Route(r'/city/<city_name>/activity/<activity_id>/fav', handler='async.Activity', name='fav', handler_method="fav"),
+  Route(r'/city/<city_name>/activity/<activity_id>/done', handler='async.Activity', name='done', handler_method="done"),
 ]
 
 app = WSGIApplication(routes, config=app_config, debug=True)
