@@ -104,7 +104,7 @@ class Cities(handlers.BaseRequestHandler):
 
 class Activity(handlers.BaseRequestHandler):
 
-  def get(self, city_name, activity_id):
+  def getItem(self, city_name, activity_id):
     activity = models.Activity.get_by_id(int(activity_id))
     user_id = self.current_user.get_id() if self.current_user else None
     response = activity.to_dict(user_id=user_id)
@@ -112,6 +112,8 @@ class Activity(handlers.BaseRequestHandler):
 
   @user_required
   def post(self, city_name):
+    logging.info(self.request.body)
+    logging.info(simplejson.loads(self.request.body))
     activity = self.request.get('activity')
     description = self.request.get('activity_description')
     city = models.City.query(models.City.name == city_name).get()
@@ -120,8 +122,7 @@ class Activity(handlers.BaseRequestHandler):
                                    city=city.key,
                                    creator=self.current_user.key)
     new_activity.put()
-    response = {'message': 'Saved.', 'activity': new_activity.to_dict()}
-    self.RenderJson(response)
+    self.RenderJson(new_activity.to_dict())
 
   @user_required
   def vote(self, city_name, activity_id):
@@ -177,7 +178,7 @@ class Activity(handlers.BaseRequestHandler):
     activity.put()
     self.RenderJson(activity.to_dict(user_id=self.current_user.get_id()))
 
-  def list(self, city_name):
+  def get(self, city_name):
     city = models.City.query(models.City.name == city_name).get()
     activities_query = models.Activity.query(models.Activity.city==city.key)
     activities = [activity.to_dict(user_id=self.current_user.get_id()) for activity in activities_query]

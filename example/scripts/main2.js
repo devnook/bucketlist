@@ -76,9 +76,9 @@ function LocaleController ($scope, $rootScope, $locale, localize, myThing, mySer
 
 function GeoController ($scope, $http) {
   var sc = $scope;
-  sc.test = '';
+  sc.test = 'aaa';
   var apiUrl = 'http://maps.googleapis.com/maps/api/geocode/json?sensor=false&latlng=';
-  /*
+
   navigator.geolocation.getCurrentPosition(function (position) {
     console.log(position);
     var url = apiUrl + position.coords.latitude + ',' + position.coords.longitude;
@@ -87,7 +87,7 @@ function GeoController ($scope, $http) {
       console.log(data);
     })
   });
-  */
+
 };
 
 
@@ -124,7 +124,6 @@ function CitiesController ($scope, $rootScope, $location, $http, $locale) {
   var sc = $scope;
 
   $http.get('/api/cities').success(function(data) {
-    console.log(data);
     sc.cities = data['cities'];
   });
 
@@ -185,31 +184,12 @@ function CityController ($scope, $routeParams, $http, $resource) {
     activity.$done({'add_to_done': add_to_done});
   };
 
-  /*
-  $http.get('/api/cities/' + sc.city + '/activities').success(function(response) {
-    console.log(response);
-    sc.activities = response.activities;
-  });
-
-  sc.addActivity = function() {
-    data = {
-      'city': sc.city,
-      'activity': sc.newActivity,
-      'activity_description': sc.newActivityDesc,
-    }
-    $http({
-        method: 'POST',
-        url: '/api/cities/' + sc.city + '/activity',
-        data: $.param(data),
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    }).success(function(response) {
-      console.log(response);
-      sc.activities.push(response.activity);
-
+  sc.addActivity = function(newActivity, newActivityDesc) {
+    var activity = new Activity({'name': newActivity, 'description': newActivityDesc});
+    activity.$save(function(obj) {
+      sc.activities.push(obj);
     });
-
   };
-  */
 
 };
 
