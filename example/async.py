@@ -83,6 +83,8 @@ class Cities(handlers.BaseRequestHandler):
   def get(self):
     #city = models.City(name='Warsaw')
     #city.put()
+    #category = models.Category(name='Sport')
+    #category.put()
     query = models.City.query()
     cities = [city.to_dict() for city in  query]
     response = {'cities': cities}
@@ -112,13 +114,12 @@ class Activity(handlers.BaseRequestHandler):
 
   @user_required
   def post(self, city_name):
-    logging.info(self.request.body)
-    logging.info(simplejson.loads(self.request.body))
-    activity = self.request.get('activity')
-    description = self.request.get('activity_description')
+    request = simplejson.loads(self.request.body)
     city = models.City.query(models.City.name == city_name).get()
-    new_activity = models.Activity(name=activity,
-                                   description=description,
+    category = models.Category.query(models.Category.name == request['category']).get()
+    new_activity = models.Activity(name=request['name'],
+                                   description=request['description'],
+                                   category=category.key,
                                    city=city.key,
                                    creator=self.current_user.key)
     new_activity.put()
@@ -214,4 +215,17 @@ class UserHandler(handlers.BaseRequestHandler):
       response = {'error': 'User not found'}
     self.RenderJson(response)
 
+
+class Category(handlers.BaseRequestHandler):
+
+  def get(self):
+    query = models.Category.query()
+    categories = [category.to_dict() for category in  query]
+    self.RenderJson(categories)
+
+  def post(self):
+    request = simplejson.loads(self.request.body)
+    category = models.Category(name=request['name'])
+    category.put()
+    self.RenderJson(category)
 

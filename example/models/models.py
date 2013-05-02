@@ -38,6 +38,14 @@ def to_dict(model):
   return output
 
 
+class Category(ndb.Model):
+  name = ndb.StringProperty(required=True)
+
+
+class Tag(ndb.Model):
+  name = ndb.StringProperty(required=True)
+
+
 class City(ndb.Model):
   name = ndb.StringProperty(required=True)
 
@@ -45,6 +53,8 @@ class City(ndb.Model):
 class Activity(ndb.Model):
   name = ndb.StringProperty(required=True)
   description = ndb.StringProperty(required=True)
+  category = ndb.KeyProperty(kind=Category)
+  tags = ndb.KeyProperty(kind=Tag, repeated=True)
   city = ndb.KeyProperty(kind=City)
   creator = ndb.KeyProperty(kind=User)
   upvoters = ndb.IntegerProperty(repeated=True)
@@ -66,6 +76,8 @@ class Activity(ndb.Model):
       'is_faved': user_id in self.followers,
       'is_done': user_id in self.doers,
     }
+    if self.category:
+      result['category'] = self.category.get().to_dict()
     if self.creator:
       creator = self.creator.get()
       result['creator'] = {

@@ -49,6 +49,8 @@ routes = [
   Route(r'/city/<city_name>/activity/<activity_id>/vote', handler='async.Activity', name='vote', handler_method="vote"),
   Route(r'/city/<city_name>/activity/<activity_id>/fav', handler='async.Activity', name='fav', handler_method="fav"),
   Route(r'/city/<city_name>/activity/<activity_id>/done', handler='async.Activity', name='done', handler_method="done"),
+
+  Route(r'/category', handler='async.Category', name='catgory'),
 ]
 
 app = WSGIApplication(routes, config=app_config, debug=True)

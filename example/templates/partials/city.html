@@ -4,19 +4,24 @@
   Add new activity:
   <input ng-model="newActivity"><br>
   <textarea ng-model="newActivityDesc" placeholder="description"></textarea><br>
-  <button ng-click="addActivity(newActivity, newActivityDesc)">add</button>
+  <select ng-model="newActivityCategory">
+     <option ng-repeat="category in categories">{* category.name *}</option>
+  </select><br>
+  <button ng-click="addActivity(newActivity, newActivityDesc, newActivityCategory)">add</button>
 </div>
 
 <div>
 <h2>Activities</h2>
 <ul>
   <li ng-hide="activities.length">No activities proposed for this city yet.</li>
-  <li ng-repeat="activity in activities">
+  <li ng-repeat="activity in activities | filter:selectedCategory">
   	<a href="#/city/{* city *}/activity/{*activity.id *}">{*activity.name*}</a>
 
   	<em>by <a href="#/user/{*activity.creator.id *}">{* activity.creator.name *}</a>
   	 +{* activity.upvotes*} / -{* activity.downvotes*} /
   	 total {* activity.upvotes - activity.downvotes*}</em>
+
+    <span class="label">{* activity.category.name *}</span>
 
   	<a ng-click="vote(activity, 1)" href="">yay:)</a> /
     <a ng-click="vote(activity, -1)" href="">nay:(</a> ///
@@ -28,6 +33,15 @@
   </li>
 
 </ul>
+</div>
+
+
+<div>
+  categories:
+  <span ng-repeat="category in categories" ng-click="selectCategory(category)" class="label">
+    {* category.name *}
+  </span>
+
 </div>
 
 

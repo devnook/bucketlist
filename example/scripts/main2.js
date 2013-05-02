@@ -184,13 +184,27 @@ function CityController ($scope, $routeParams, $http, $resource) {
     activity.$done({'add_to_done': add_to_done});
   };
 
-  sc.addActivity = function(newActivity, newActivityDesc) {
-    var activity = new Activity({'name': newActivity, 'description': newActivityDesc});
+  sc.addActivity = function(newActivity, newActivityDesc, newActivityCategory) {
+    console.log(newActivityCategory);
+    var activity = new Activity({
+      'name': newActivity,
+      'description': newActivityDesc,
+      'category': newActivityCategory
+    });
     activity.$save(function(obj) {
       sc.activities.push(obj);
     });
   };
 
+  var Category = $resource(
+    '/category',
+    {activityId:'@id'}
+  );
+  sc.categories = Category.query();
+  sc.selectedCategory = null;
+  sc.selectCategory = function(category) {
+    sc.selectedCategory = category.name;
+  };
 };
 
 
