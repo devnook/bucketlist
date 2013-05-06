@@ -69,6 +69,7 @@ class Activity(ndb.Model):
       'name': self.name,
       'description': self.description,
       'city': self.city.get().to_dict(),
+      'tags': [tag.get().name for tag in self.tags],
       'upvotes': len(self.upvoters),
       'downvotes': len(self.downvoters),
       'is_upvoted': user_id in self.upvoters,
@@ -77,7 +78,7 @@ class Activity(ndb.Model):
       'is_done': user_id in self.doers,
     }
     if self.category:
-      result['category'] = self.category.get().to_dict()
+      result['category'] = self.category.get().name
     if self.creator:
       creator = self.creator.get()
       result['creator'] = {

@@ -43,14 +43,16 @@ routes = [
   #Route('/api/cities/<city_name>/activities', handler='async.Activities', name='activities'),
   Route('/api/user/<user_id>', handler='async.UserHandler', name='user'),
 
-  Route(r'/city/<city_name>/activity', handler='async.Activity', name='activity'),
-  Route(r'/city/<city_name>/activity', handler='async.Activity', name='activity'),
-  Route(r'/city/<city_name>/activity/<activity_id>', handler='async.Activity', name='activity', handler_method="getItem"),
+  Route(r'/city/<city_name>/activity', handler='async.Activity', name='activity-list', handler_method="list", methods=['GET']),
+  Route(r'/city/<city_name>/activity', handler='async.Activity', name='activity-post', handler_method="post", methods=['POST']),
+  Route(r'/city/<city_name>/activity/<activity_id>', handler='async.Activity', name='activity', handler_method="get", methods=['GET']),
+  Route(r'/city/<city_name>/activity/<activity_id>', handler='async.Activity', name='activity-edit', handler_method="edit", methods=['POST']),
   Route(r'/city/<city_name>/activity/<activity_id>/vote', handler='async.Activity', name='vote', handler_method="vote"),
   Route(r'/city/<city_name>/activity/<activity_id>/fav', handler='async.Activity', name='fav', handler_method="fav"),
   Route(r'/city/<city_name>/activity/<activity_id>/done', handler='async.Activity', name='done', handler_method="done"),
 
   Route(r'/category', handler='async.Category', name='catgory'),
+  Route(r'/tag', handler='async.Tag', name='tag'),
 ]
 
 app = WSGIApplication(routes, config=app_config, debug=True)

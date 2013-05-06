@@ -100,7 +100,7 @@ function ActivityController ($scope, $resource, $routeParams, $http, $locale) {
     {
       vote: {method:'POST', params:{verb: 'vote'}},
       fav: {method:'POST', params:{verb: 'fav'}},
-      done: {method:'POST', params:{verb: 'done'}}
+      done: {method:'POST', params:{verb: 'done'}},
     }
   );
 
@@ -117,6 +117,19 @@ function ActivityController ($scope, $resource, $routeParams, $http, $locale) {
   sc.done = function(add_to_done) {
     sc.activity.$done({'add_to_done': add_to_done});
   };
+
+  var Tag = $resource(
+    '/tag/:tagName',
+    {tagName:'@id'}
+  );
+
+  sc.tags = Tag.query();
+
+  sc.addTags = function(tags) {
+    sc.activity.tags = tags.split(',');
+    sc.activity.$save();
+
+  }
 };
 
 

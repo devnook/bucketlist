@@ -30,6 +30,8 @@
     <a ng-show="!activity.is_done" ng-click="done(activity, true)" href="">I've done that</a>
   	<a ng-show="activity.is_done" ng-click="done(activity, false)" href="">Remove from my done list</a>
     <p ng-show="activity.description">{* activity.description*}</p>
+    <p><span class="badge" ng-repeat="tag in activity.tags">{* tag *}</span></p>
+    <p><span class="badge">{* activity.category *}</span></p>
   </li>
 
 </ul>

@@ -78,6 +78,14 @@ class OpenChannel(abstract_handler.AbstractHandler):
 """
 
 
+class Tag(handlers.BaseRequestHandler):
+
+  def get(self):
+    query = models.Tag.query()
+    tags = [tag.name for tag in tags]
+    self.RenderJson(tags)
+
+
 class Cities(handlers.BaseRequestHandler):
 
   def get(self):
@@ -85,6 +93,8 @@ class Cities(handlers.BaseRequestHandler):
     #city.put()
     #category = models.Category(name='Sport')
     #category.put()
+    #tag = models.Tag(name='food')
+    #tag.put()
     query = models.City.query()
     cities = [city.to_dict() for city in  query]
     response = {'cities': cities}
@@ -106,22 +116,52 @@ class Cities(handlers.BaseRequestHandler):
 
 class Activity(handlers.BaseRequestHandler):
 
-  def getItem(self, city_name, activity_id):
+  def get(self, city_name, activity_id):
     activity = models.Activity.get_by_id(int(activity_id))
     user_id = self.current_user.get_id() if self.current_user else None
     response = activity.to_dict(user_id=user_id)
     self.RenderJson(response)
 
   @user_required
-  def post(self, city_name):
+  def edit(self, city_name, activity_id):
     request = simplejson.loads(self.request.body)
     city = models.City.query(models.City.name == city_name).get()
-    category = models.Category.query(models.Category.name == request['category']).get()
+    category = models.Category.query(models.Category.name == request.get('category')['name']).get()
+    tags = None
+    if request.get('tags'):
+      tags = [models.Tag.query(models.Tag.name == tag).get().key for tag in request.get('tags')]
+    activity = models.Activity.get_by_id(int(activity_id))
+    activity.name = request['name']
+    activity.description = request['description']
+    activity.city = city.key
+    activity.creator = self.current_user.key
+    if category:
+      activity.category = category.key
+    if tags:
+      activity.tags = tags
+    logging.info(activity)
+    activity.put()
+    self.RenderJson(activity.to_dict())
+
+  @user_required
+  def post(self, city_name):
+    request = simplejson.loads(self.request.body)
+    logging.info(request)
+    logging.info(self.current_user)
+    city = models.City.query(models.City.name == city_name).get()
+    category = models.Category.query(models.Category.name == request.get('category')).get()
+    tags = None
+    if request.get('tags'):
+      tags = [models.Tag.query(models.Tag.name == tag).get().key for tag in request.get('tags')]
     new_activity = models.Activity(name=request['name'],
                                    description=request['description'],
-                                   category=category.key,
                                    city=city.key,
                                    creator=self.current_user.key)
+    if category:
+      new_activity.category = category.key
+    #if tags:
+    #  new_activity.tags = category.key
+    logging.info(new_activity)
     new_activity.put()
     self.RenderJson(new_activity.to_dict())
 
@@ -179,10 +219,13 @@ class Activity(handlers.BaseRequestHandler):
     activity.put()
     self.RenderJson(activity.to_dict(user_id=self.current_user.get_id()))
 
-  def get(self, city_name):
+  def list(self, city_name):
+    logging.info('listdddddddddddddddddd')
     city = models.City.query(models.City.name == city_name).get()
     activities_query = models.Activity.query(models.Activity.city==city.key)
     activities = [activity.to_dict(user_id=self.current_user.get_id()) for activity in activities_query]
+    logging.info(city)
+    logging.info(activities)
     self.RenderJson(activities)
 
 
@@ -228,4 +271,11 @@ class Category(handlers.BaseRequestHandler):
     category = models.Category(name=request['name'])
     category.put()
     self.RenderJson(category)
+
+class Tag(handlers.BaseRequestHandler):
+
+  def get(self):
+    query = models.Tag.query()
+    tags = [tag.to_dict() for tag in  query]
+    self.RenderJson(tags)
 

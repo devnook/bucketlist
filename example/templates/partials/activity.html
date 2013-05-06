@@ -15,8 +15,11 @@
     <a ng-show="!activity.is_done" ng-click="done(true)" href="">I've done that</a>
   	<a ng-show="activity.is_done" ng-click="done(false)" href="">Remove from my done list</a>
     <p ng-show="activity.description">{* activity.description*}</p>
+    <p><span class="badge" ng-repeat="tag in activity.tags">{* tag *}</span></p>
+    <p><span class="badge">{* activity.category *}</span></p>
 
+    <input ng-model="newTags"><button ng-click="addTags(newTags)">add</button>
 
 </div>
 
-
+<div><span ng-repeat="tag in tags" class="badge">{* tag.name *}</span></div>
